@@ -6,7 +6,7 @@ import time
 from threading import Thread
 
 # Токен бота
-TOKEN = os.environ.get('BOT_TOKEN', 'ВАШ_ТОКЕН_ЗДЕСЬ')
+TOKEN = os.environ.get('BOT_TOKEN', '8262276813:AAG2SxWcGkai-Zxqo8AOvC13IQcZmRV65DQ')
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -554,3 +554,4 @@ if __name__ == "__main__":
     
     # Запускаем бота
     bot.polling(none_stop=True, interval=1, timeout=20)
+
