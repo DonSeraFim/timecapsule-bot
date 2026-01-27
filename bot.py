@@ -4,6 +4,16 @@ import datetime
 import os
 import time
 from threading import Thread
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('bot.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Токен бота
 TOKEN = os.environ.get('BOT_TOKEN', '8262276813:AAG2SxWcGkai-Zxqo8AOvC13IQcZmRV65DQ')
@@ -590,14 +600,27 @@ def start_scheduler():
 
 # ========== ЗАПУСК БОТА ==========
 
+# Запуск бота
 if __name__ == "__main__":
     print("🚀 Запускаем Video Capsule Bot...")
-
-    # Запускаем планировщик
-    start_scheduler()
-
-    print("✅ Бот запущен и готов к работе!")
-    print("📞 Ожидаю сообщения...")
-
-    # Запускаем бота
-    bot.polling(none_stop=True, interval=1, timeout=20)
+    
+    try:
+        # Запускаем планировщик
+        start_scheduler()
+        
+        print("✅ Бот запущен и готов к работе!")
+        print("📞 Ожидаю сообщения...")
+        
+        # Запускаем бота с обработкой ошибок
+        while True:
+            try:
+                bot.polling(none_stop=True, interval=1, timeout=20)
+            except Exception as e:
+                logger.error(f"❌ Ошибка в polling: {e}")
+                print(f"❌ Бот упал: {e}")
+                print("🔄 Перезапуск через 5 секунд...")
+                time.sleep(5)
+                
+    except Exception as e:
+        logger.error(f"❌ Критическая ошибка: {e}")
+        print(f"❌ Критическая ошибка: {e}")
